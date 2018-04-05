@@ -53,7 +53,7 @@ RUN chmod +x /tmp/pre-env.sh && \
     echo 'date.timezone = "AGENDAV_TIMEZONE"' >> /etc/php5/apache2/php.ini && \
     echo 'magic_quotes_runtime = false' >> /etc/php5/cli/php.ini && \
     echo 'magic_quotes_runtime = false' >> /etc/php5/apache2/php.ini && \
-    /tmp/pre-env.sh && \
+    /bin/bash /tmp/pre-env.sh && \
     cd /var/www/agendav && \
     service mysql restart && \
     yes | php agendavcli migrations:migrate && \
