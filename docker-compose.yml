@@ -1,0 +1,17 @@
+version: "2"
+
+services: 
+  agendav: 
+    image: agendav:2.2.0
+    container_name: agendav
+    environment:
+      - AGENDAV_SERVER_NAME=127.0.0.1
+      - AGENDAV_TITLE=''
+      - AGENDAV_FOOTER=''
+      - AGENDAV_ENC_KEY=my_encrypt10n_k3y
+      - AGENDAV_CALDAV_SERVER=127.0.0.1/cal.php
+      - AGENDAV_TIMEZONE=UTC
+      - AGENDAV_LANG=en
+      - AGENDAV_LOG_DIR=/tmp/
+    ports:
+      - "80:80"
