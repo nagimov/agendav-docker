@@ -55,6 +55,7 @@ RUN chmod +x /tmp/pre-env.sh && \
     echo 'magic_quotes_runtime = false' >> /etc/php5/apache2/php.ini && \
     /bin/bash /tmp/pre-env.sh && \
     cd /var/www/agendav && \
+    find /var/lib/mysql/mysql -exec touch -c -a {} + && \
     service mysql restart && \
     yes | php agendavcli migrations:migrate && \
     chmod +x /usr/local/bin/run.sh && \
