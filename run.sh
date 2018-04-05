@@ -14,6 +14,7 @@ CONFIG_FILE="/etc/php5/apache2/php.ini"
 sed -i -e "s/AGENDAV_TIMEZONE/$( echo "${AGENDAV_TIMEZONE}" | sed -e 's/[\/}]/\\&/g')/" ${CONFIG_FILE}
 
 
+find /var/lib/mysql/mysql -exec touch -c -a {} +
 service mysql restart
 if [ "x$1" = 'xapache2' ]; then
 	echo "Start webserver"
