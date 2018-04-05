@@ -53,6 +53,12 @@ RUN chmod +x /tmp/pre-env.sh && \
     echo 'date.timezone = "AGENDAV_TIMEZONE"' >> /etc/php5/apache2/php.ini && \
     echo 'magic_quotes_runtime = false' >> /etc/php5/cli/php.ini && \
     echo 'magic_quotes_runtime = false' >> /etc/php5/apache2/php.ini && \
+    cd /etc/ssl/certs/ && \
+    wget --no-check-certificate http://curl.haxx.se/ca/cacert.pem && \
+    echo 'openssl.cafile = "/etc/ssl/certs/cacert.pem"' >> /etc/php5/cli/php.ini && \
+    echo 'openssl.cafile = "/etc/ssl/certs/cacert.pem"' >> /etc/php5/apache2/php.ini && \
+    echo 'curl.cainfo = "/etc/ssl/certs/cacert.pem"' >> /etc/php5/cli/php.ini && \
+    echo 'curl.cainfo = "/etc/ssl/certs/cacert.pem"' >> /etc/php5/apache2/php.ini && \
     /bin/bash /tmp/pre-env.sh && \
     cd /var/www/agendav && \
     find /var/lib/mysql/mysql -exec touch -c -a {} + && \
