@@ -2,6 +2,8 @@ FROM debian:wheezy
 
 MAINTAINER Ruslan Nagimov <nagimov@outlook.com>
 
+ENV AGENDAV_VERSION 2.2.0
+
 ENV APACHE_RUN_USER=www-data
 ENV APACHE_RUN_GROUP=www-data
 ENV APACHE_LOG_DIR=/var/log/apache2
@@ -38,9 +40,9 @@ RUN find /var/lib/mysql/mysql -exec touch -c -a {} + && \
     mysql -e "GRANT ALL PRIVILEGES ON $AGENDAV_DB_NAME.* TO '$AGENDAV_DB_USER'@'localhost' IDENTIFIED BY '$AGENDAV_DB_PASSWORD';"
 
 RUN cd /tmp && \
-    wget --no-check-certificate https://github.com/agendav/agendav/releases/download/2.2.0/agendav-2.2.0.tar.gz && \
-    tar -xf agendav-2.2.0.tar.gz -C /tmp && \
-    mv /tmp/agendav-2.2.0 /var/www/agendav && \
+    wget --no-check-certificate https://github.com/agendav/agendav/releases/download/$AGENDAV_VERSION/agendav-$AGENDAV_VERSION.tar.gz && \
+    tar -xf agendav-$AGENDAV_VERSION.tar.gz -C /tmp && \
+    mv /tmp/agendav-$AGENDAV_VERSION /var/www/agendav && \
     chown -R www-data:www-data /var/www/agendav/web/var
 
 COPY agendav.conf /etc/apache2/sites-available/agendav.conf
