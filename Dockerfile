@@ -1,4 +1,4 @@
-FROM debian:wheezy
+FROM debian:stretch
 
 MAINTAINER Ruslan Nagimov <nagimov@outlook.com>
 
@@ -17,18 +17,20 @@ ENV AGENDAV_DB_PASSWORD=agendav_db_password
 ENV AGENDAV_TIMEZONE=UTC
 
 RUN apt-get update && \
-    apt-get install -y wget && \ 
-    wget http://www.dotdeb.org/dotdeb.gpg && \
-    apt-key add dotdeb.gpg && \
-    echo 'deb http://packages.dotdeb.org wheezy-php56 all' >> /etc/apt/sources.list && \
-    echo 'deb-src http://packages.dotdeb.org wheezy-php56 all' >> /etc/apt/sources.list && \
+    apt-get install -y apt-transport-https \
+        ca-certificates \
+        gnupg \
+        wget && \
+    wget https://packages.sury.org/php/apt.gpg && \
+    apt-key add apt.gpg && \
+    echo 'deb https://packages.sury.org/php/ stretch main' >> /etc/apt/sources.list.d/php.list && \
     apt-get update && \
     apt-get -q -y install mysql-server && \
     apt-get -y install \
         apache2 \
-        php5 \
-        php5-mysql && \
-    apt-get update && \
+        php5.6 \
+        php5.6-xml \
+        php5.6-mysql && \
     apt-get install nano && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -40,7 +42,7 @@ RUN find /var/lib/mysql/mysql -exec touch -c -a {} + && \
     mysql -e "GRANT ALL PRIVILEGES ON $AGENDAV_DB_NAME.* TO '$AGENDAV_DB_USER'@'localhost' IDENTIFIED BY '$AGENDAV_DB_PASSWORD';"
 
 RUN cd /tmp && \
-    wget --no-check-certificate https://github.com/agendav/agendav/releases/download/$AGENDAV_VERSION/agendav-$AGENDAV_VERSION.tar.gz && \
+    wget https://github.com/agendav/agendav/releases/download/$AGENDAV_VERSION/agendav-$AGENDAV_VERSION.tar.gz && \
     tar -xf agendav-$AGENDAV_VERSION.tar.gz -C /tmp && \
     mv /tmp/agendav-$AGENDAV_VERSION /var/www/agendav && \
     chown -R www-data:www-data /var/www/agendav/web/var
@@ -51,16 +53,16 @@ COPY run.sh /usr/local/bin/run.sh
 COPY pre-env.sh /tmp/pre-env.sh
 
 RUN chmod +x /tmp/pre-env.sh && \
-    echo 'date.timezone = "AGENDAV_TIMEZONE"' >> /etc/php5/cli/php.ini && \
-    echo 'date.timezone = "AGENDAV_TIMEZONE"' >> /etc/php5/apache2/php.ini && \
-    echo 'magic_quotes_runtime = false' >> /etc/php5/cli/php.ini && \
-    echo 'magic_quotes_runtime = false' >> /etc/php5/apache2/php.ini && \
+    echo 'date.timezone = "AGENDAV_TIMEZONE"' >> /etc/php/5.6/cli/php.ini && \
+    echo 'date.timezone = "AGENDAV_TIMEZONE"' >> /etc/php/5.6/apache2/php.ini && \
+    echo 'magic_quotes_runtime = false' >> /etc/php/5.6/cli/php.ini && \
+    echo 'magic_quotes_runtime = false' >> /etc/php/5.6/apache2/php.ini && \
     cd /etc/ssl/certs/ && \
-    wget --no-check-certificate http://curl.haxx.se/ca/cacert.pem && \
-    echo 'openssl.cafile = "/etc/ssl/certs/cacert.pem"' >> /etc/php5/cli/php.ini && \
-    echo 'openssl.cafile = "/etc/ssl/certs/cacert.pem"' >> /etc/php5/apache2/php.ini && \
-    echo 'curl.cainfo = "/etc/ssl/certs/cacert.pem"' >> /etc/php5/cli/php.ini && \
-    echo 'curl.cainfo = "/etc/ssl/certs/cacert.pem"' >> /etc/php5/apache2/php.ini && \
+    wget https://curl.haxx.se/ca/cacert.pem && \
+    echo 'openssl.cafile = "/etc/ssl/certs/cacert.pem"' >> /etc/php/5.6/cli/php.ini && \
+    echo 'openssl.cafile = "/etc/ssl/certs/cacert.pem"' >> /etc/php/5.6/apache2/php.ini && \
+    echo 'curl.cainfo = "/etc/ssl/certs/cacert.pem"' >> /etc/php/5.6/cli/php.ini && \
+    echo 'curl.cainfo = "/etc/ssl/certs/cacert.pem"' >> /etc/php/5.6/apache2/php.ini && \
     /bin/bash /tmp/pre-env.sh && \
     cd /var/www/agendav && \
     find /var/lib/mysql/mysql -exec touch -c -a {} + && \
@@ -70,7 +72,7 @@ RUN chmod +x /tmp/pre-env.sh && \
     a2ensite agendav.conf && \
     a2dissite 000-default && \
     a2enmod rewrite && \
-    a2enmod php5 && \
+    a2enmod php5.6 && \
     service apache2 restart && \
     service apache2 stop
 
