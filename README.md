@@ -2,7 +2,7 @@
 ![](https://img.shields.io/docker/pulls/nagimov/agendav-docker.svg)
 
 # agendav-docker
-Docker image for agendav
+Docker image for AgenDAV - CalDAV web client ([project github](https://github.com/agendav/agendav)). AgenDAV requires a CalDAV server running alongside (Baïkal, DAViCal, etc.)
 
 Since this image only carries a front-end for CalDAV, there's no provision for persistency. Running agendav statelessly has no drawbacks since agendav itself is not very customizable.
 
