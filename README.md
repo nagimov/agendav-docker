@@ -8,6 +8,11 @@ Since this image only carries a front-end for CalDAV, there's no provision for p
 
 Image is not optimized for size or compilation time. Standard `debian` base image is used. Final image size is few hundred megabytes (I know it's terrible and I don't care).
 
+## Supported tags
+
+* [`latest`, `2.2.0`, `2.2.0-stretch`](https://github.com/nagimov/agendav-docker/commit/5a8bf42e954ea512fc23abf1f00b82319d996a6b)
+* [`2.2.0-wheezy`](https://github.com/nagimov/agendav-docker/commit/97e11ebb437d586d656f740603be7d4f55a4b283)
+
 ## ENVs (self-explanatory)
 
 - `AGENDAV_SERVER_NAME`
