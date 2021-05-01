@@ -2,12 +2,12 @@ version: "2"
 
 services: 
   agendav: 
-    image: agendav:2.2.0
+    image: nagimov/agendav-docker:latest
     container_name: agendav
     environment:
       - AGENDAV_SERVER_NAME=127.0.0.1
-      - AGENDAV_TITLE=''
-      - AGENDAV_FOOTER=''
+      - AGENDAV_TITLE=Agendav Site Title
+      - AGENDAV_FOOTER=Agendav Site Footer
       - AGENDAV_ENC_KEY=my_encrypt10n_k3y
       - AGENDAV_CALDAV_SERVER=127.0.0.1/cal.php
       - AGENDAV_TIMEZONE=UTC

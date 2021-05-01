@@ -2,11 +2,14 @@
 [![](https://img.shields.io/docker/pulls/nagimov/agendav-docker.svg)](https://hub.docker.com/r/nagimov/agendav-docker)
 
 # agendav-docker
-Docker image for AgenDAV - CalDAV web client ([project github](https://github.com/agendav/agendav)). AgenDAV requires a CalDAV server running alongside (Baïkal, DAViCal, etc.). Address to CaLDAV server must be specified in `AGENDAV_CALDAV_SERVER` env, e.g. `AGENDAV_CALDAV_SERVER=https://baikal.server.com/cal.php`
 
-Since this image only carries a front-end for CalDAV, there's no provision for persistency. Running agendav statelessly has no drawbacks since agendav itself is not very customizable.
+Docker image for [AgenDAV - CalDAV web client](https://github.com/agendav/agendav). AgenDAV requires a CalDAV server running alongside (Baïkal, DAViCal, etc.). The address of CalDAV server must be specified in `AGENDAV_CALDAV_SERVER` env, e.g. `AGENDAV_CALDAV_SERVER=https://baikal.server.com/cal.php`
 
-Image is not optimized for size or compilation time. Standard `debian` base image is used. Final image size is few hundred megabytes (I know it's terrible and I don't care).
+**Note regarding use of Baïkal back-end**: `WebDAV authentication type` must be set to `Basic` during Baïkal initialization.
+
+Since this image only carries a front-end for CalDAV, there's no provision for persistency. Running agendav statelessly has no drawbacks since agendav itself is not customizable.
+
+Standard `debian` base image is used. The build is not optimized for size or compilation time.
 
 ## Supported tags
 
