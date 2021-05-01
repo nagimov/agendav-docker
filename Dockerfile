@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:buster
 
 MAINTAINER Ruslan Nagimov <nagimov@outlook.com>
 
@@ -23,9 +23,9 @@ RUN apt-get update && \
         wget && \
     wget https://packages.sury.org/php/apt.gpg && \
     apt-key add apt.gpg && \
-    echo 'deb https://packages.sury.org/php/ stretch main' >> /etc/apt/sources.list.d/php.list && \
+    echo 'deb https://packages.sury.org/php/ buster main' >> /etc/apt/sources.list.d/php.list && \
     apt-get update && \
-    apt-get -q -y install mysql-server && \
+    apt-get -q -y install mariadb-server && \
     apt-get -y install \
         apache2 \
         php5.6 \
