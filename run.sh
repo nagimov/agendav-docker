@@ -15,7 +15,7 @@ sed -i -e "s/UTC/$( echo "${AGENDAV_TIMEZONE}" | sed -e 's/[\/}]/\\&/g')/" ${CON
 
 
 find /var/lib/mysql/mysql -exec touch -c -a {} +
-service mysql restart
+service mariadb restart
 if [ "x$1" = 'xapache2' ]; then
 	echo "Start webserver"
 	exec /usr/sbin/apache2ctl -D FOREGROUND

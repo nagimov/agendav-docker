@@ -1,4 +1,4 @@
-FROM debian:buster
+FROM debian:bullseye
 
 MAINTAINER Ruslan Nagimov <nagimov@outlook.com>
 
@@ -23,7 +23,7 @@ RUN apt-get update && \
         wget && \
     wget https://packages.sury.org/php/apt.gpg && \
     apt-key add apt.gpg && \
-    echo 'deb https://packages.sury.org/php/ buster main' >> /etc/apt/sources.list.d/php.list && \
+    echo 'deb https://packages.sury.org/php/ bullseye main' >> /etc/apt/sources.list.d/php.list && \
     apt-get update && \
     apt-get -q -y install mariadb-server && \
     apt-get -y install \
@@ -36,7 +36,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN find /var/lib/mysql/mysql -exec touch -c -a {} + && \
-    service mysql restart && \
+    service mariadb restart && \
     mysql -e "CREATE DATABASE $AGENDAV_DB_NAME;" && \
     mysql -e "CREATE USER '$AGENDAV_DB_USER'@'localhost' IDENTIFIED BY '$AGENDAV_DB_PASSWORD';" && \
     mysql -e "GRANT ALL PRIVILEGES ON $AGENDAV_DB_NAME.* TO '$AGENDAV_DB_USER'@'localhost' IDENTIFIED BY '$AGENDAV_DB_PASSWORD';"
@@ -66,7 +66,7 @@ RUN chmod +x /tmp/pre-env.sh && \
     /bin/bash /tmp/pre-env.sh && \
     cd /var/www/agendav && \
     find /var/lib/mysql/mysql -exec touch -c -a {} + && \
-    service mysql restart && \
+    service mariadb restart && \
     yes | php agendavcli migrations:migrate && \
     chmod +x /usr/local/bin/run.sh && \
     a2ensite agendav.conf && \
