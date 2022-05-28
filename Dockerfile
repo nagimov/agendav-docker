@@ -76,6 +76,10 @@ RUN chmod +x /tmp/pre-env.sh && \
     service apache2 restart && \
     service apache2 stop
 
+RUN ln -sf /dev/stdout /var/log/apache2/access.log \
+    && ln -sf /dev/stderr /var/log/apache2/error.log \
+    && ln -sf /dev/stderr /var/log/apache2/davi-error.log
+
 EXPOSE 80
 
 ENTRYPOINT ["/usr/local/bin/run.sh"]
