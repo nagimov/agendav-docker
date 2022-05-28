@@ -58,7 +58,7 @@ RUN chmod +x /tmp/pre-env.sh && \
     echo 'magic_quotes_runtime = false' >> /etc/php/5.6/cli/php.ini && \
     echo 'magic_quotes_runtime = false' >> /etc/php/5.6/apache2/php.ini && \
     cd /etc/ssl/certs/ && \
-    wget https://curl.haxx.se/ca/cacert.pem && \
+    wget https://curl.se/ca/cacert.pem && \
     echo 'openssl.cafile = "/etc/ssl/certs/cacert.pem"' >> /etc/php/5.6/cli/php.ini && \
     echo 'openssl.cafile = "/etc/ssl/certs/cacert.pem"' >> /etc/php/5.6/apache2/php.ini && \
     echo 'curl.cainfo = "/etc/ssl/certs/cacert.pem"' >> /etc/php/5.6/cli/php.ini && \
