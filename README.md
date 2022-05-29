@@ -18,13 +18,35 @@ Standard `debian` base image is used. The build is not optimized for size or com
 * [`2.2.0-stretch`](https://github.com/nagimov/agendav-docker/commit/5a8bf42e954ea512fc23abf1f00b82319d996a6b)
 * [`2.2.0-wheezy`](https://github.com/nagimov/agendav-docker/commit/97e11ebb437d586d656f740603be7d4f55a4b283)
 
-## ENVs (self-explanatory)
+## Environment Variables
 
-- `AGENDAV_SERVER_NAME`
-- `AGENDAV_TITLE`
-- `AGENDAV_FOOTER`
-- `AGENDAV_ENC_KEY`
-- `AGENDAV_CALDAV_SERVER`
-- `AGENDAV_TIMEZONE`
-- `AGENDAV_LANG`
-- `AGENDAV_LOG_DIR`
+Note: **all environment variables are mandatory** and must be set via [`docker-compose.yml`](https://github.com/nagimov/agendav-docker/blob/master/docker-compose.yml) or via `-e` option of `docker run ...`
+
+| Environment Variable    | Example                               |
+| ----------------------- | ------------------------------------- |
+| `AGENDAV_SERVER_NAME`   | `127.0.0.1`                           |
+| `AGENDAV_TITLE`         | `"Welcome to Example Agendav Server"` |
+| `AGENDAV_FOOTER`        | `"Hosted by Example Company"`         |
+| `AGENDAV_ENC_KEY`       | `my_encrypt10n_k3y`                   |
+| `AGENDAV_CALDAV_SERVER` | `https://baikal.example.com/cal.php`  |
+| `AGENDAV_TIMEZONE`      | `UTC`                                 |
+| `AGENDAV_LANG`          | `en`                                  |
+| `AGENDAV_LOG_DIR`       | `/tmp/`                               |
+
+## Deployment
+
+- use provided [`docker-compose.yml`](https://github.com/nagimov/agendav-docker/blob/master/docker-compose.yml) and deploy via `docker-compose up`
+- or deploy via `docker run`:
+```
+docker run -d --name=agendav \
+    -p 80:80 \
+    -e AGENDAV_SERVER_NAME=127.0.0.1 \
+    -e AGENDAV_TITLE="Welcome to Example Agendav Server" \
+    -e AGENDAV_FOOTER="Hosted by Example Company" \
+    -e AGENDAV_ENC_KEY=my_encrypt10n_k3y \
+    -e AGENDAV_CALDAV_SERVER=https://baikal.example.com/cal.php \
+    -e AGENDAV_TIMEZONE=UTC \
+    -e AGENDAV_LANG=en \
+    -e AGENDAV_LOG_DIR=/tmp/ \
+    nagimov/agendav-docker:latest
+```
