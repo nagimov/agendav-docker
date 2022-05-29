@@ -13,7 +13,7 @@ Standard `debian` base image is used. The build is not optimized for size or com
 
 ## Supported tags
 
-* [`latest`, `2.2.0`, `2.2.0-bullseye`](https://github.com/nagimov/agendav-docker/commit/583abdf68ca6abafbc64cf0fe68528645e0c1bac)
+* [`latest`, `2.2.0`, `2.2.0-bullseye`](https://github.com/nagimov/agendav-docker/commit/d938b77607f6978375f311e2650d8109c2168b63)
 * [`2.2.0-buster`](https://github.com/nagimov/agendav-docker/commit/ed083623e14218b6bf9a801aa38c47968cbec1e0)
 * [`2.2.0-stretch`](https://github.com/nagimov/agendav-docker/commit/5a8bf42e954ea512fc23abf1f00b82319d996a6b)
 * [`2.2.0-wheezy`](https://github.com/nagimov/agendav-docker/commit/97e11ebb437d586d656f740603be7d4f55a4b283)
