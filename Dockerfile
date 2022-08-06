@@ -2,7 +2,7 @@ FROM debian:bullseye
 
 MAINTAINER Ruslan Nagimov <nagimov@outlook.com>
 
-ENV AGENDAV_VERSION 2.2.0
+ENV AGENDAV_VERSION 2.4.0
 
 ENV APACHE_RUN_USER=www-data
 ENV APACHE_RUN_GROUP=www-data
