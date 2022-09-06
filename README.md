@@ -16,16 +16,17 @@ See [packages](https://ghcr.io/nagimov/agendav-docker)
 
 Note: **all environment variables are mandatory** and must be set via [`docker-compose.yml`](https://github.com/nagimov/agendav-docker/blob/master/docker-compose.yml) or via `-e` option of `docker run ...`
 
-| Environment Variable    | Example                               |
-| ----------------------- | ------------------------------------- |
-| `AGENDAV_SERVER_NAME`   | `127.0.0.1`                           |
-| `AGENDAV_TITLE`         | `"Welcome to Example Agendav Server"` |
-| `AGENDAV_FOOTER`        | `"Hosted by Example Company"`         |
-| `AGENDAV_ENC_KEY`       | `my_encrypt10n_k3y`                   |
-| `AGENDAV_CALDAV_SERVER` | `https://baikal.example.com/cal.php`  |
-| `AGENDAV_TIMEZONE`      | `UTC`, `UTC+1`, `Europe/Berlin`       |
-| `AGENDAV_LANG`          | `en`                                  |
-| `AGENDAV_LOG_DIR`       | `/tmp/`                               |
+| Environment Variable        | Example                               |
+| --------------------------- | ------------------------------------- |
+| `AGENDAV_SERVER_NAME`       | `127.0.0.1`                           |
+| `AGENDAV_TITLE`             | `"Welcome to Example Agendav Server"` |
+| `AGENDAV_FOOTER`            | `"Hosted by Example Company"`         |
+| `AGENDAV_ENC_KEY`           | `my_encrypt10n_k3y`                   |
+| `AGENDAV_CALDAV_SERVER`     | `https://baikal.example.com/cal.php`  |
+| `AGENDAV_CALDAV_PUBLIC_URL` | `https://baikal.example.com`          |
+| `AGENDAV_TIMEZONE`          | `UTC`, `UTC+1`, `Europe/Berlin`       |
+| `AGENDAV_LANG`              | `en`                                  |
+| `AGENDAV_LOG_DIR`           | `/tmp/`                               |
 
 ## Deployment
 
@@ -40,6 +41,7 @@ docker run -d --name=agendav \
     -e AGENDAV_FOOTER="Hosted by Example Company" \
     -e AGENDAV_ENC_KEY=my_encrypt10n_k3y \
     -e AGENDAV_CALDAV_SERVER=https://baikal.example.com/cal.php \
+    -e AGENDAV_CALDAV_PUBLIC_URL=https://baikal.example.com \
     -e AGENDAV_TIMEZONE=UTC \
     -e AGENDAV_LANG=en \
     -e AGENDAV_LOG_DIR=/tmp/ \
