@@ -29,6 +29,7 @@ RUN apt-get update && \
     apt-get -y install \
         apache2 \
         php5.6 \
+        php5.6-mbstring \
         php5.6-xml \
         php5.6-mysql && \
     apt-get install nano && \

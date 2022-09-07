@@ -26,7 +26,7 @@ $app['caldav.authmethod'] = 'basic';
 // Whether to show public CalDAV urls
 $app['caldav.publicurls'] = true;
 // Whether to show public CalDAV urls
-$app['caldav.baseurl.public'] = 'AGENDAV_CALDAV_SERVER';
+$app['caldav.baseurl.public'] = 'AGENDAV_CALDAV_PUBLIC_URL';
 // Default timezone
 $app['defaults.timezone'] = 'AGENDAV_TIMEZONE';
 // Default languajge
