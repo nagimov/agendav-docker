@@ -12,9 +12,6 @@ sed -i -e "s/AGENDAV_LOG_DIR/$( echo "${AGENDAV_LOG_DIR}" | sed -e 's/[\/}]/\\&/
 CONFIG_FILE="${PHP_INI_DIR}/php.ini"
 sed -i -e "s/UTC/$( echo "${AGENDAV_TIMEZONE}" | sed -e 's/[\/}]/\\&/g')/" ${CONFIG_FILE}
 
-
-find /var/lib/mysql/mysql -exec touch -c -a {} +
-service mariadb restart
 if [ "x$1" = 'xapache2' ]; then
 	echo "Start webserver"
 	exec /usr/sbin/apache2ctl -D FOREGROUND

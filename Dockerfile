@@ -19,12 +19,8 @@ ENV APACHE_RUN_USER=www-data
 ENV APACHE_RUN_GROUP=www-data
 ENV APACHE_LOG_DIR=/var/log/apache2
 ENV APACHE_LOCK_DIR=/var/lock/apache2
-ENV APACHE_PID_FILE=/var/run/apache2.pid
-ENV DEBIAN_FRONTEND=noninteractive
+ENV APACHE_PID_FILE=/var/run/apache2/apache2.pid
 ENV TERM=xterm
-ENV AGENDAV_DB_NAME=agendav_database
-ENV AGENDAV_DB_USER=agendav_db_user
-ENV AGENDAV_DB_PASSWORD=agendav_db_password
 ENV AGENDAV_TIMEZONE=UTC
 ENV PHP_INI_DIR /usr/local/etc/php
 
@@ -32,21 +28,12 @@ ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/do
 
 RUN apt-get update && \
     apt-get install -y apt-transport-https \
-        apache2 \
-        ca-certificates \
-        gnupg && \
-    apt-get -q -y install mariadb-server && \
+        ca-certificates && \
     chmod +x /usr/local/bin/install-php-extensions && \
-    install-php-extensions mbstring xml pdo_mysql && \
+    install-php-extensions mbstring xml pdo_sqlite && \
     rm /usr/local/bin/install-php-extensions && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-RUN find /var/lib/mysql/mysql -exec touch -c -a {} + && \
-    service mariadb restart && \
-    mysql -e "CREATE DATABASE $AGENDAV_DB_NAME;" && \
-    mysql -e "CREATE USER '$AGENDAV_DB_USER'@'localhost' IDENTIFIED BY '$AGENDAV_DB_PASSWORD';" && \
-    mysql -e "GRANT ALL PRIVILEGES ON $AGENDAV_DB_NAME.* TO '$AGENDAV_DB_USER'@'localhost' IDENTIFIED BY '$AGENDAV_DB_PASSWORD';"
 
 COPY --from=downloader --chown=www-data:www-data /tmp/agendav /var/www/agendav
 
@@ -66,8 +53,10 @@ RUN chmod +x /tmp/pre-env.sh && \
     /bin/bash /tmp/pre-env.sh && \
     rm /tmp/pre-env.sh && \
     cd /var/www/agendav && \
-    find /var/lib/mysql/mysql -exec touch -c -a {} + && \
-    service mariadb restart && \
+    mkdir -p /var/agendav && \
+    touch /var/agendav/db.sqlite && \
+    chown -R www-data:www-data /var/agendav && \
+    chmod 640 /var/agendav/db.sqlite && \
     yes | php agendavcli migrations:migrate && \
     chmod +x /usr/local/bin/run.sh && \
     a2ensite agendav.conf && \
