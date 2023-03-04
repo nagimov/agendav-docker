@@ -1,10 +1,19 @@
 ARG PHP_VERSION=7.4
 
+FROM debian:bullseye-slim as downloader
+
+ENV AGENDAV_VERSION 2.6.0
+
+ADD https://github.com/agendav/agendav/releases/download/$AGENDAV_VERSION/agendav-$AGENDAV_VERSION.tar.gz /tmp/
+
+RUN cd /tmp && \
+    tar -xf agendav-$AGENDAV_VERSION.tar.gz -C /tmp && \
+    mv /tmp/agendav-$AGENDAV_VERSION /tmp/agendav
+
+
 FROM php:${PHP_VERSION}-apache-bullseye
 
 MAINTAINER Ruslan Nagimov <nagimov@outlook.com>
-
-ENV AGENDAV_VERSION 2.6.0
 
 ENV APACHE_RUN_USER=www-data
 ENV APACHE_RUN_GROUP=www-data
@@ -25,8 +34,7 @@ RUN apt-get update && \
     apt-get install -y apt-transport-https \
         apache2 \
         ca-certificates \
-        gnupg \
-        wget && \
+        gnupg && \
     apt-get -q -y install mariadb-server && \
     chmod +x /usr/local/bin/install-php-extensions && \
     install-php-extensions mbstring xml pdo_mysql && \
@@ -40,26 +48,23 @@ RUN find /var/lib/mysql/mysql -exec touch -c -a {} + && \
     mysql -e "CREATE USER '$AGENDAV_DB_USER'@'localhost' IDENTIFIED BY '$AGENDAV_DB_PASSWORD';" && \
     mysql -e "GRANT ALL PRIVILEGES ON $AGENDAV_DB_NAME.* TO '$AGENDAV_DB_USER'@'localhost' IDENTIFIED BY '$AGENDAV_DB_PASSWORD';"
 
-RUN cd /tmp && \
-    wget https://github.com/agendav/agendav/releases/download/$AGENDAV_VERSION/agendav-$AGENDAV_VERSION.tar.gz && \
-    tar -xf agendav-$AGENDAV_VERSION.tar.gz -C /tmp && \
-    mv /tmp/agendav-$AGENDAV_VERSION /var/www/agendav && \
-    chown -R www-data:www-data /var/www/agendav/web/var
+COPY --from=downloader --chown=www-data:www-data /tmp/agendav /var/www/agendav
 
 COPY agendav.conf /etc/apache2/sites-available/agendav.conf
 COPY settings.php /var/www/agendav/web/config/settings.php
 COPY run.sh /usr/local/bin/run.sh
 COPY pre-env.sh /tmp/pre-env.sh
 
+ADD https://curl.se/ca/cacert.pem /etc/ssl/certs/
+
 RUN chmod +x /tmp/pre-env.sh && \
     cp ${PHP_INI_DIR}/php.ini-production ${PHP_INI_DIR}/php.ini && \
     echo 'date.timezone = "AGENDAV_TIMEZONE"' >> ${PHP_INI_DIR}/php.ini && \
     echo 'magic_quotes_runtime = false' >> ${PHP_INI_DIR}/php.ini && \
-    cd /etc/ssl/certs/ && \
-    wget https://curl.se/ca/cacert.pem && \
     echo 'openssl.cafile = "/etc/ssl/certs/cacert.pem"' >> ${PHP_INI_DIR}/php.ini && \
     echo 'curl.cainfo = "/etc/ssl/certs/cacert.pem"' >> ${PHP_INI_DIR}/php.ini && \
     /bin/bash /tmp/pre-env.sh && \
+    rm /tmp/pre-env.sh && \
     cd /var/www/agendav && \
     find /var/lib/mysql/mysql -exec touch -c -a {} + && \
     service mariadb restart && \
