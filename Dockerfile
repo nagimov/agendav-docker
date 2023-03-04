@@ -45,6 +45,9 @@ COPY pre-env.sh /tmp/pre-env.sh
 ADD https://curl.se/ca/cacert.pem /etc/ssl/certs/
 
 RUN chmod +x /tmp/pre-env.sh && \
+    chown -R www-data:www-data ${PHP_INI_DIR} && \
+    chown -R www-data:www-data /var/run/apache2 && \
+    echo "Listen 8080" > /etc/apache2/ports.conf && \
     cp ${PHP_INI_DIR}/php.ini-production ${PHP_INI_DIR}/php.ini && \
     echo 'date.timezone = "AGENDAV_TIMEZONE"' >> ${PHP_INI_DIR}/php.ini && \
     echo 'magic_quotes_runtime = false' >> ${PHP_INI_DIR}/php.ini && \
@@ -69,7 +72,9 @@ RUN ln -sf /dev/stdout /var/log/apache2/access.log \
     && ln -sf /dev/stderr /var/log/apache2/error.log \
     && ln -sf /dev/stderr /var/log/apache2/davi-error.log
 
-EXPOSE 80
+EXPOSE 8080
+
+USER www-data
 
 ENTRYPOINT ["/usr/local/bin/run.sh"]
 

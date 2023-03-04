@@ -35,7 +35,7 @@ Note: **all environment variables are mandatory** and must be set via [`docker-c
 ```
 docker pull ghcr.io/nagimov/agendav-docker:latest
 docker run -d --name=agendav \
-    -p 80:80 \
+    -p 80:8080 \
     -e AGENDAV_SERVER_NAME=127.0.0.1 \
     -e AGENDAV_TITLE="Welcome to Example Agendav Server" \
     -e AGENDAV_FOOTER="Hosted by Example Company" \
