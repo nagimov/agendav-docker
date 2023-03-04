@@ -1,8 +1,10 @@
-FROM debian:bullseye
+ARG PHP_VERSION=7.4
+
+FROM php:${PHP_VERSION}-apache-bullseye
 
 MAINTAINER Ruslan Nagimov <nagimov@outlook.com>
 
-ENV AGENDAV_VERSION 2.5.0
+ENV AGENDAV_VERSION 2.6.0
 
 ENV APACHE_RUN_USER=www-data
 ENV APACHE_RUN_GROUP=www-data
@@ -15,24 +17,20 @@ ENV AGENDAV_DB_NAME=agendav_database
 ENV AGENDAV_DB_USER=agendav_db_user
 ENV AGENDAV_DB_PASSWORD=agendav_db_password
 ENV AGENDAV_TIMEZONE=UTC
+ENV PHP_INI_DIR /usr/local/etc/php
+
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
 RUN apt-get update && \
     apt-get install -y apt-transport-https \
+        apache2 \
         ca-certificates \
         gnupg \
         wget && \
-    wget https://packages.sury.org/php/apt.gpg && \
-    apt-key add apt.gpg && \
-    echo 'deb https://packages.sury.org/php/ bullseye main' >> /etc/apt/sources.list.d/php.list && \
-    apt-get update && \
     apt-get -q -y install mariadb-server && \
-    apt-get -y install \
-        apache2 \
-        php5.6 \
-        php5.6-mbstring \
-        php5.6-xml \
-        php5.6-mysql && \
-    apt-get install nano && \
+    chmod +x /usr/local/bin/install-php-extensions && \
+    install-php-extensions mbstring xml pdo_mysql && \
+    rm /usr/local/bin/install-php-extensions && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -54,16 +52,13 @@ COPY run.sh /usr/local/bin/run.sh
 COPY pre-env.sh /tmp/pre-env.sh
 
 RUN chmod +x /tmp/pre-env.sh && \
-    echo 'date.timezone = "AGENDAV_TIMEZONE"' >> /etc/php/5.6/cli/php.ini && \
-    echo 'date.timezone = "AGENDAV_TIMEZONE"' >> /etc/php/5.6/apache2/php.ini && \
-    echo 'magic_quotes_runtime = false' >> /etc/php/5.6/cli/php.ini && \
-    echo 'magic_quotes_runtime = false' >> /etc/php/5.6/apache2/php.ini && \
+    cp ${PHP_INI_DIR}/php.ini-production ${PHP_INI_DIR}/php.ini && \
+    echo 'date.timezone = "AGENDAV_TIMEZONE"' >> ${PHP_INI_DIR}/php.ini && \
+    echo 'magic_quotes_runtime = false' >> ${PHP_INI_DIR}/php.ini && \
     cd /etc/ssl/certs/ && \
     wget https://curl.se/ca/cacert.pem && \
-    echo 'openssl.cafile = "/etc/ssl/certs/cacert.pem"' >> /etc/php/5.6/cli/php.ini && \
-    echo 'openssl.cafile = "/etc/ssl/certs/cacert.pem"' >> /etc/php/5.6/apache2/php.ini && \
-    echo 'curl.cainfo = "/etc/ssl/certs/cacert.pem"' >> /etc/php/5.6/cli/php.ini && \
-    echo 'curl.cainfo = "/etc/ssl/certs/cacert.pem"' >> /etc/php/5.6/apache2/php.ini && \
+    echo 'openssl.cafile = "/etc/ssl/certs/cacert.pem"' >> ${PHP_INI_DIR}/php.ini && \
+    echo 'curl.cainfo = "/etc/ssl/certs/cacert.pem"' >> ${PHP_INI_DIR}/php.ini && \
     /bin/bash /tmp/pre-env.sh && \
     cd /var/www/agendav && \
     find /var/lib/mysql/mysql -exec touch -c -a {} + && \
@@ -73,7 +68,6 @@ RUN chmod +x /tmp/pre-env.sh && \
     a2ensite agendav.conf && \
     a2dissite 000-default && \
     a2enmod rewrite && \
-    a2enmod php5.6 && \
     service apache2 restart && \
     service apache2 stop
 
