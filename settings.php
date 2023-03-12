@@ -9,11 +9,8 @@ $app['site.footer'] = 'AGENDAV_FOOTER';
 $app['proxies'] = [];
 // Database settings
 $app['db.options'] = [
-    	'dbname' => 'AGENDAV_DB_NAME',
-        'user' => 'AGENDAV_DB_USER',
-        'password' => 'AGENDAV_DB_PASSWORD',
-    	'host' => '127.0.0.1',
-    	'driver' => 'pdo_mysql',
+    	'path' => '/var/agendav/db.sqlite',
+    	'driver' => 'pdo_sqlite',
 ];
 // Encryption key
 $app['encryption.key'] = 'AGENDAV_ENC_KEY';
