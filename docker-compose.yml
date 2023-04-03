@@ -15,4 +15,4 @@ services:
       - AGENDAV_LANG=en
       - AGENDAV_LOG_DIR=/tmp/
     ports:
-      - "80:80"
+      - "80:8080"
