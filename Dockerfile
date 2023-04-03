@@ -45,6 +45,7 @@ COPY pre-env.sh /tmp/pre-env.sh
 ADD https://curl.se/ca/cacert.pem /etc/ssl/certs/
 
 RUN chmod +x /tmp/pre-env.sh && \
+    chmod 644 /etc/ssl/certs/cacert.pem && \
     chown -R www-data:www-data ${PHP_INI_DIR} && \
     chown -R www-data:www-data /var/run/apache2 && \
     echo "Listen 8080" > /etc/apache2/ports.conf && \
