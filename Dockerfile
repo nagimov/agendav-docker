@@ -48,7 +48,8 @@ RUN chmod +x /tmp/pre-env.sh && \
     chmod 644 /etc/ssl/certs/cacert.pem && \
     chown -R www-data:www-data ${PHP_INI_DIR} && \
     chown -R www-data:www-data /var/run/apache2 && \
-    echo "Listen 8080" > /etc/apache2/ports.conf && \
+    chmod 755 ${APACHE_LOG_DIR} && \
+    chown -R www-data:www-data ${APACHE_LOG_DIR} && \
     cp ${PHP_INI_DIR}/php.ini-production ${PHP_INI_DIR}/php.ini && \
     echo 'date.timezone = "AGENDAV_TIMEZONE"' >> ${PHP_INI_DIR}/php.ini && \
     echo 'magic_quotes_runtime = false' >> ${PHP_INI_DIR}/php.ini && \
@@ -66,12 +67,14 @@ RUN chmod +x /tmp/pre-env.sh && \
     a2ensite agendav.conf && \
     a2dissite 000-default && \
     a2enmod rewrite && \
+    echo "Listen 127.0.0.1:8080" > /etc/apache2/ports.conf && \
     service apache2 restart && \
-    service apache2 stop
+    service apache2 stop &&  \
+    echo "Listen 8080" > /etc/apache2/ports.conf
 
-RUN ln -sf /dev/stdout /var/log/apache2/access.log \
-    && ln -sf /dev/stderr /var/log/apache2/error.log \
-    && ln -sf /dev/stderr /var/log/apache2/davi-error.log
+RUN ln -sf /dev/stdout ${APACHE_LOG_DIR}/access.log \
+    && ln -sf /dev/stderr ${APACHE_LOG_DIR}/error.log \
+    && ln -sf /dev/stderr ${APACHE_LOG_DIR}/davi-error.log
 
 EXPOSE 8080
 
