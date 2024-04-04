@@ -72,6 +72,9 @@ RUN chmod +x /tmp/pre-env.sh && \
     service apache2 stop &&  \
     echo "Listen 8080" > /etc/apache2/ports.conf
 
+RUN chown www-data:www-data /var/www/agendav/web/config/settings.php
+RUN chown www-data:www-data ${PHP_INI_DIR}/php.ini
+
 RUN ln -sf /dev/stdout ${APACHE_LOG_DIR}/access.log \
     && ln -sf /dev/stderr ${APACHE_LOG_DIR}/error.log \
     && ln -sf /dev/stderr ${APACHE_LOG_DIR}/davi-error.log
