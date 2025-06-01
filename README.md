@@ -21,7 +21,6 @@ Note: **all environment variables are mandatory** and must be set via [`docker-c
 | `AGENDAV_SERVER_NAME`       | `127.0.0.1`                           |
 | `AGENDAV_TITLE`             | `"Welcome to Example Agendav Server"` |
 | `AGENDAV_FOOTER`            | `"Hosted by Example Company"`         |
-| `AGENDAV_ENC_KEY`           | `my_encrypt10n_k3y`                   |
 | `AGENDAV_CALDAV_SERVER`     | `https://baikal.example.com/cal.php`  |
 | `AGENDAV_CALDAV_PUBLIC_URL` | `https://baikal.example.com`          |
 | `AGENDAV_TIMEZONE`          | `UTC`, `UTC+1`, `Europe/Berlin`       |
@@ -40,7 +39,6 @@ docker run -d --name=agendav \
     -e AGENDAV_SERVER_NAME=127.0.0.1 \
     -e AGENDAV_TITLE="Welcome to Example Agendav Server" \
     -e AGENDAV_FOOTER="Hosted by Example Company" \
-    -e AGENDAV_ENC_KEY=my_encrypt10n_k3y \
     -e AGENDAV_CALDAV_SERVER=https://baikal.example.com/cal.php \
     -e AGENDAV_CALDAV_PUBLIC_URL=https://baikal.example.com \
     -e AGENDAV_TIMEZONE=UTC \

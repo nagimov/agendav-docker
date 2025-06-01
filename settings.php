@@ -12,8 +12,6 @@ $app['db.options'] = [
     	'path' => '/var/agendav/db.sqlite',
     	'driver' => 'pdo_sqlite',
 ];
-// Encryption key
-$app['encryption.key'] = 'AGENDAV_ENC_KEY';
 // Log path
 $app['log.path'] = 'AGENDAV_LOG_DIR';
 // Base URL
