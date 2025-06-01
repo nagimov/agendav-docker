@@ -25,6 +25,7 @@ Note: **all environment variables are mandatory** and must be set via [`docker-c
 | `AGENDAV_CALDAV_SERVER`     | `https://baikal.example.com/cal.php`  |
 | `AGENDAV_CALDAV_PUBLIC_URL` | `https://baikal.example.com`          |
 | `AGENDAV_TIMEZONE`          | `UTC`, `UTC+1`, `Europe/Berlin`       |
+| `AGENDAV_WEEKSTART`         | `0` (Sunday) or `1` (Monday)          |
 | `AGENDAV_LANG`              | `en`                                  |
 | `AGENDAV_LOG_DIR`           | `/tmp/`                               |
 

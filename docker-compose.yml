@@ -14,5 +14,6 @@ services:
       - AGENDAV_TIMEZONE=UTC
       - AGENDAV_LANG=en
       - AGENDAV_LOG_DIR=/tmp/
+      - AGENDAV_WEEKSTART=1
     ports:
       - "80:8080"
