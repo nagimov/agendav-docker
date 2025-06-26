@@ -8,7 +8,7 @@ sed -i -e "s/AGENDAV_CALDAV_PUBLIC_URL/$( echo "${AGENDAV_CALDAV_PUBLIC_URL:-$AG
 sed -i -e "s/UTC/$( echo "${AGENDAV_TIMEZONE}" | sed -e 's/[\/}]/\\&/g')/" ${CONFIG_FILE}
 sed -i -e "s/AGENDAV_LANG/$( echo "${AGENDAV_LANG}" | sed -e 's/[\/}]/\\&/g')/" ${CONFIG_FILE}
 sed -i -e "s/AGENDAV_LOG_DIR/$( echo "${AGENDAV_LOG_DIR}" | sed -e 's/[\/}]/\\&/g')/" ${CONFIG_FILE}
-sed -i -e "s/AGENDAV_WEEKSTART/$( echo "${AGENDAV_WEEKSTART}" | sed -e 's/[\/}]/\\&/g')/" ${CONFIG_FILE}
+sed -i -e "s/'AGENDAV_WEEKSTART'/$( echo "${AGENDAV_WEEKSTART}" | sed -e 's/[\/}]/\\&/g')/" ${CONFIG_FILE}
 CONFIG_FILE="${PHP_INI_DIR}/php.ini"
 sed -i -e "s/UTC/$( echo "${AGENDAV_TIMEZONE}" | sed -e 's/[\/}]/\\&/g')/" ${CONFIG_FILE}
 
