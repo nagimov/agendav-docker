@@ -24,7 +24,7 @@ $app['caldav.publicurls'] = true;
 $app['caldav.baseurl.public'] = 'AGENDAV_CALDAV_PUBLIC_URL';
 // Default timezone
 $app['defaults.timezone'] = 'AGENDAV_TIMEZONE';
-// Default languajge
+// Default language
 $app['defaults.language'] = 'AGENDAV_LANG';
 // Default time format. Options: '12' / '24'
 $app['defaults.time.format'] = '24';
@@ -42,3 +42,4 @@ $app['defaults.weekstart'] = 'AGENDAV_WEEKSTART';
 $app['logout.redirection'] = '';
 // Calendar sharing
 $app['calendar.sharing'] = true;
+
