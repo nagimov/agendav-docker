@@ -1,8 +1,8 @@
-ARG PHP_VERSION=8.2
+ARG PHP_VERSION=8.5
 
-FROM debian:bullseye-slim as downloader
+FROM debian:trixie-slim as downloader
 
-ENV AGENDAV_VERSION 2.6.0
+ENV AGENDAV_VERSION 3.3.1
 
 ADD https://github.com/agendav/agendav/releases/download/$AGENDAV_VERSION/agendav-$AGENDAV_VERSION.tar.gz /tmp/
 
@@ -11,9 +11,7 @@ RUN cd /tmp && \
     mv /tmp/agendav-$AGENDAV_VERSION /tmp/agendav
 
 
-FROM php:${PHP_VERSION}-apache-bullseye
-
-MAINTAINER Ruslan Nagimov <nagimov@outlook.com>
+FROM php:${PHP_VERSION}-apache-trixie
 
 ENV APACHE_RUN_USER=www-data
 ENV APACHE_RUN_GROUP=www-data
@@ -22,6 +20,7 @@ ENV APACHE_LOCK_DIR=/var/lock/apache2
 ENV APACHE_PID_FILE=/var/run/apache2/apache2.pid
 ENV TERM=xterm
 ENV AGENDAV_TIMEZONE=UTC
+ENV AGENDAV_ENVIRONMENT=prod
 ENV PHP_INI_DIR /usr/local/etc/php
 
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
@@ -30,7 +29,7 @@ RUN apt-get update && \
     apt-get install -y apt-transport-https \
         ca-certificates && \
     chmod +x /usr/local/bin/install-php-extensions && \
-    install-php-extensions mbstring xml pdo_sqlite && \
+    install-php-extensions mbstring xml pdo_sqlite intl zip && \
     rm /usr/local/bin/install-php-extensions && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -38,7 +37,7 @@ RUN apt-get update && \
 COPY --from=downloader --chown=www-data:www-data /tmp/agendav /var/www/agendav
 
 COPY agendav.conf /etc/apache2/sites-available/agendav.conf
-COPY settings.php /var/www/agendav/web/config/settings.php
+COPY settings.php /var/www/agendav/config/settings.php
 COPY run.sh /usr/local/bin/run.sh
 COPY pre-env.sh /tmp/pre-env.sh
 
@@ -62,7 +61,9 @@ RUN chmod +x /tmp/pre-env.sh && \
     touch /var/agendav/db.sqlite && \
     chown -R www-data:www-data /var/agendav && \
     chmod 640 /var/agendav/db.sqlite && \
-    yes | php agendavcli migrations:migrate && \
+    mkdir -p var/log var/cache && \
+    chown -R www-data:www-data var config && \
+    yes | php bin/agendavcli migrations:migrate && \
     chmod +x /usr/local/bin/run.sh && \
     a2ensite agendav.conf && \
     a2dissite 000-default && \
